@@ -29,11 +29,16 @@ F_SERIF = "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf"
 F_SERIF_R = "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf"
 F_SANS = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 F_SANS_B = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-F_SANS_I = "/usr/share/fonts/truetype/liberation/LiberationSans-Italic.ttf"
+F_SANS_I = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 
 
 def font(path, size):
-    return ImageFont.truetype(path, size)
+    for cand in (path, F_SANS, "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"):
+        try:
+            return ImageFont.truetype(cand, size)
+        except (OSError, IOError):
+            continue
+    return ImageFont.load_default()
 
 
 def wrap(draw, text, f, max_w):
